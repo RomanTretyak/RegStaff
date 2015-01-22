@@ -1,0 +1,98 @@
+﻿@using RegStaff.Models;
+@model WhoChange
+@{
+    ViewBag.Title = "History";
+}
+<!--
+<h1>История внесения изменений</h1>
+
+
+-->
+
+<script src="~/Scripts/jquery-1.10.2.min.js" type="text/javascript"></script>
+<script src="~/Scripts/i18n/grid.locale-ru.js" type="text/javascript"></script>
+<link href="~/Content/themes/base/jquery.ui.all.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/jquery.jqGrid/ui.jqgrid_1.css" rel="stylesheet" type="text/css" />
+<script src="~/Scripts/jquery-ui-1.8.11.min.js" type="text/javascript"></script>
+<script src="~/Scripts/jquery.jqGrid.js" type="text/javascript"></script>
+
+<style>
+    .ui-jqgrid .ui-pg-input {
+        height: 20px;
+    }
+
+    .ui-jqgrid .ui-jqgrid-pager {
+        height: 50px;
+    }
+</style>
+
+<table id="jqg"></table>
+<div id="jpager"></div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var lastSel;
+        $("#jqg").jqGrid({
+            url: '/History/Data',
+            datatype: "json",
+            mtype: 'POST',
+           // width: all,
+            height: 500,
+            jsonReader: {
+                page: "page",
+                total: "total",
+                records: "records",
+                root: "rows",
+                repeatitems: false,
+                id: ""
+            },
+            colNames: ['Логин', 'Дата изменения', 'Тип', 'ФИО', 'До изменения', 'После изменения'],
+            colModel: [
+            { name: 'Login'},
+            { name: 'Date'},
+            { name: 'OType'},
+            { name: 'FIO' },
+            { name: 'Set', width: 400 },
+            { name: 'Get', width: 380 }],
+            rowNum: 2000,
+            viewrecords: false,
+            shrinkToFit: false,
+            pager: '#jpager',
+            autowidth: true,
+            loadonce: true,
+            sortname: 'Id',
+            sortorder: "asc", // порядок сортировки
+
+            //будет treeview для каждого итема грида    !!!!!!!!!!!!!!!!!!!!!!!!!!
+            //subGridOptions: { "plusicon" : "ui-icon-triangle-1-e", "minusicon" : "ui-icon-triangle-1-s", "openicon" : "ui-icon-arrowreturn-1-e",  "expandOnLoad" : true },
+            //subGrid : true,
+            //subGridUrl: '/Home/ProjectData',
+            //subGridModel: [{ name  : ['No','Item','Qty','Unit','Line Total'],
+            //    width : [55,200,80,80,80] }
+            //],
+            //caption: "Subgrid Example",
+
+            ondblClickRow: function (rowid) { //view form on double click
+
+                $("#jqg").jqGrid('viewGridRow', rowid, { closeOnEscape: true });
+                //alert("clicj");
+            },
+            onSelectRow: function (id) {
+                if (id && id !== lastSel) {
+                    jQuery('#jqg').restoreRow(lastSel);
+                    lastSel = id;
+                }
+                //jQuery('#jqg').editRow(id, true);
+            }
+        });
+        $('#jqg').jqGrid('filterToolbar');
+        $("#jqg").jqGrid('navGrid', '#jpager', {
+            add: false,
+            del: false,
+            edit: false,
+            search: true,
+            searchtext: "Поиск",
+            refresh: true,
+            refreshtext: "Обновить",
+        });
+    });
+</script>

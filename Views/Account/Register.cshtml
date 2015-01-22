@@ -1,0 +1,37 @@
+﻿@model RegStaff.Models.RegisterModel
+@{
+    ViewBag.Title = "Регистрация в системе";
+}
+
+<hgroup class="title">
+    <h1>@ViewBag.Title</h1>
+    <h5>Создать новую учетную запись</h5>
+</hgroup>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+
+    <fieldset>
+        <legend>Registration Form</legend>
+        <ol>
+            <li>
+                @Html.LabelFor(m => m.UserName)
+                @Html.TextBoxFor(m => m.UserName)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.Password)
+                @Html.PasswordFor(m => m.Password)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.ConfirmPassword)
+                @Html.PasswordFor(m => m.ConfirmPassword)
+            </li>
+        </ol>
+        <input type="submit" value="Регистрация" />
+    </fieldset>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
